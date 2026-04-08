@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Fitness Calculator{% endblock %}
+{% block nav_calc %}active{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="badge" style="background: linear-gradient(135deg, #ff6b35, #f7c948); color: #0b0c10;">
+    🔥 Fitness Calculator
+  </div>
+  <h1>Know Your <span style="background: linear-gradient(135deg, #ff6b35, #f7c948); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Numbers</span></h1>
+  <p>BMI &bull; Daily calories &bull; Macro breakdown — all in one shot.</p>
+</div>
+
+<div class="card">
+  <form method="post" action="/calculate">
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Age (years)</label>
+        <input type="number" name="age" min="10" max="100" placeholder="e.g. 28"
+               value="{{ request.form.age if request.form else '' }}" required />
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <select name="gender" required>
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Weight (kg)</label>
+        <input type="number" name="weight" min="30" max="300" step="0.1" placeholder="e.g. 78"
+               required />
+      </div>
+
+      <div class="form-group">
+        <label>Height (cm)</label>
+        <input type="number" name="height" min="100" max="250" placeholder="e.g. 178"
+               required />
+      </div>
+
+      <div class="form-group full">
+        <label>Activity Level</label>
+        <select name="activity" required>
+          <option value="">Select activity level</option>
+          <option value="sedentary">Sedentary — desk job, little or no exercise</option>
+          <option value="light">Lightly Active — light exercise 1-3 days/week</option>
+          <option value="moderate">Moderately Active — moderate exercise 3-5 days/week</option>
+          <option value="active">Very Active — hard exercise 6-7 days/week</option>
+          <option value="very_active">Extremely Active — physical job + training daily</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">
+      Calculate My Stats ⚡
+    </button>
+  </form>
+</div>
+
+{% if result %}
+
+<div class="result-section">
+
+  <!-- BMI -->
+  <h2>📊 Your Results</h2>
+
+  <div class="stats-grid">
+
+    <div class="stat-card" style="border-color: {{ result.bmi.color }}33;">
+      <div class="stat-label">BMI</div>
+      <div class="stat-value" style="color: {{ result.bmi.color }}">{{ result.bmi.value }}</div>
+      <div class="stat-sub">{{ result.bmi.category }}</div>
+    </div>
+
+    <div class="stat-card" style="border-color: #ff6b3533;">
+      <div class="stat-label">Daily Calories</div>
+      <div class="stat-value" style="color: #ff6b35;">{{ result.tdee }}</div>
+      <div class="stat-sub">kcal / day (TDEE)</div>
+    </div>
+
+    <div class="stat-card" style="border-color: #39d98a33;">
+      <div class="stat-label">Protein</div>
+      <div class="stat-value" style="color: #39d98a;">{{ result.macros.protein }}g</div>
+      <div class="stat-sub">30% of calories</div>
+    </div>
+
+    <div class="stat-card" style="border-color: #4fc3f733;">
+      <div class="stat-label">Carbs</div>
+      <div class="stat-value" style="color: #4fc3f7;">{{ result.macros.carbs }}g</div>
+      <div class="stat-sub">40% of calories</div>
+    </div>
+
+    <div class="stat-card" style="border-color: #a78bfa33;">
+      <div class="stat-label">Fats</div>
+      <div class="stat-value" style="color: #a78bfa;">{{ result.macros.fats }}g</div>
+      <div class="stat-sub">30% of calories</div>
+    </div>
+
+  </div>
+
+  <hr class="divider" />
+
+  <!-- Macro bar -->
+  <div class="card" style="margin-top: 0;">
+    <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:0.75rem;">
+      Macro Split
+    </div>
+    <div class="macro-bar">
+      <span style="width: 30%; background: #39d98a;"></span>
+      <span style="width: 40%; background: #4fc3f7;"></span>
+      <span style="width: 30%; background: #a78bfa;"></span>
+    </div>
+    <div style="display:flex; gap:1.5rem; font-size:0.82rem; margin-top:0.5rem;">
+      <span style="color:#39d98a;">⬛ Protein 30%</span>
+      <span style="color:#4fc3f7;">⬛ Carbs 40%</span>
+      <span style="color:#a78bfa;">⬛ Fats 30%</span>
+    </div>
+
+    <hr class="divider" />
+
+    <div style="font-size:0.85rem; color:var(--muted); line-height:1.7;">
+      <strong style="color:var(--text);">What does this mean?</strong><br/>
+      Your TDEE (Total Daily Energy Expenditure) is the number of calories your body burns each day based on your stats and activity level.
+      Eat at this level to <strong style="color:#f7c948;">maintain</strong> your weight,
+      eat ~300–500 kcal less to <strong style="color:#39d98a;">lose fat</strong>,
+      or ~300–500 kcal more to <strong style="color:#4fc3f7;">build muscle</strong>.
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:2rem;">
+    <a href="/workout" class="btn btn-secondary">
+      Generate a Workout Plan →
+    </a>
+  </div>
+
+</div>
+{% endif %}
+
+{% endblock %}
