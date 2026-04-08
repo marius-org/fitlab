@@ -1,15 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Workout Generator{% endblock %}
+{% block title %}Workout{% endblock %}
 {% block nav_workout %}active{% endblock %}
 
 {% block content %}
 
 <div class="page-header">
-  <div class="page-tag" style="color:#ff6b6b; background:rgba(255,107,107,0.08); border-color:rgba(255,107,107,0.2);">
-    💪 Workout Generator
-  </div>
-  <h1>Build Your <span style="background:linear-gradient(135deg,#ff6b6b,#f7c948);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Workout</span></h1>
-  <p>Pick a muscle group and difficulty — get a full plan instantly.</p>
+  <div class="page-tag">// Workout Generator</div>
+  <h1>BUILD YOUR<br><span class="highlight">WORKOUT</span></h1>
+  <p>Select a muscle group and difficulty level. Get a full training plan instantly.</p>
 </div>
 
 <div class="card">
@@ -19,7 +17,7 @@
       <div class="form-group">
         <label>Muscle Group</label>
         <select name="muscle_group" required>
-          <option value="">Select muscle group</option>
+          <option value="">Select</option>
           {% for group in muscle_groups %}
           <option value="{{ group }}" {% if result and result.muscle_group.lower() == group %}selected{% endif %}>
             {{ group.title() }}
@@ -31,7 +29,7 @@
       <div class="form-group">
         <label>Difficulty</label>
         <select name="difficulty" required>
-          <option value="">Select difficulty</option>
+          <option value="">Select</option>
           <option value="beginner"     {% if result and result.difficulty == 'Beginner'     %}selected{% endif %}>Beginner</option>
           <option value="intermediate" {% if result and result.difficulty == 'Intermediate' %}selected{% endif %}>Intermediate</option>
           <option value="advanced"     {% if result and result.difficulty == 'Advanced'     %}selected{% endif %}>Advanced</option>
@@ -39,38 +37,28 @@
       </div>
 
     </div>
-    <button type="submit" class="btn btn-primary" style="background:linear-gradient(135deg,#ff6b6b,#f7c948); box-shadow:0 4px 24px rgba(255,107,107,0.2);">
-      Generate Workout →
-    </button>
+    <button type="submit" class="btn btn-primary">Generate Workout →</button>
   </form>
 </div>
 
 {% if result %}
 <div class="result-section">
 
-  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem;">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
     <div>
-      <div class="section-title" style="margin-bottom:0.25rem;">Your Workout</div>
-      <div style="font-size:1.2rem; font-weight:800; letter-spacing:-0.5px;">
-        {% if result.muscle_group == 'Chest' %}🏋️
-        {% elif result.muscle_group == 'Back' %}🔙
-        {% elif result.muscle_group == 'Legs' %}🦵
-        {% elif result.muscle_group == 'Shoulders' %}🤷
-        {% elif result.muscle_group == 'Arms' %}💪
-        {% else %}⚡{% endif %}
+      <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:3px;color:var(--grey);margin-bottom:0.5rem;">Training Session</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:3px;line-height:1;">
         {{ result.muscle_group }}
       </div>
     </div>
-
-    <div style="display:flex; gap:0.5rem; align-items:center;">
+    <div style="display:flex;gap:0.5rem;align-items:center;padding-bottom:0.4rem;">
       <span class="pill" style="
-        {% if result.difficulty == 'Beginner' %}background:rgba(67,233,123,0.1); color:#43e97b; border-color:rgba(67,233,123,0.2);
-        {% elif result.difficulty == 'Intermediate' %}background:rgba(247,201,72,0.1); color:#f7c948; border-color:rgba(247,201,72,0.2);
-        {% else %}background:rgba(255,107,107,0.1); color:#ff6b6b; border-color:rgba(255,107,107,0.2);{% endif %}
-        font-size:0.75rem; padding:0.35rem 0.85rem;">
+        {% if result.difficulty == 'Beginner' %}background:rgba(200,255,0,0.1);color:var(--neon);
+        {% elif result.difficulty == 'Intermediate' %}background:rgba(255,200,0,0.1);color:#ffc800;
+        {% else %}background:rgba(255,59,48,0.1);color:var(--red);{% endif %}">
         {{ result.difficulty }}
       </span>
-      <span class="pill" style="background:rgba(255,255,255,0.04); color:var(--text-2); border-color:var(--border); font-size:0.75rem; padding:0.35rem 0.85rem;">
+      <span class="pill" style="background:var(--surface);color:var(--grey);">
         {{ result.total }} exercises
       </span>
     </div>
@@ -79,37 +67,29 @@
   <div class="exercise-list">
     {% for ex in result.exercises %}
     <div class="exercise-card">
-      <div class="ex-num">{{ loop.index }}</div>
-      <div class="ex-content">
-        <div class="ex-name">{{ ex.exercise }}</div>
-      </div>
+      <div class="ex-num">{{ "%02d" % loop.index }}</div>
+      <div class="ex-name">{{ ex.exercise }}</div>
       <div class="ex-badges">
-        <span class="pill" style="background:rgba(255,107,107,0.1); color:#ff6b6b; border-color:rgba(255,107,107,0.2);">
-          {{ ex.sets }} sets
-        </span>
-        <span class="pill" style="background:rgba(108,99,255,0.1); color:#a78bfa; border-color:rgba(108,99,255,0.2);">
-          {{ ex.reps }} reps
-        </span>
-        <span class="pill" style="background:rgba(67,233,123,0.1); color:#43e97b; border-color:rgba(67,233,123,0.2);">
-          {{ ex.rest }}
-        </span>
+        <span class="pill" style="background:var(--neon-dim);color:var(--neon);">{{ ex.sets }} sets</span>
+        <span class="pill" style="background:rgba(255,255,255,0.05);color:var(--white);">{{ ex.reps }} reps</span>
+        <span class="pill" style="background:var(--surface);color:var(--grey);">{{ ex.rest }}</span>
       </div>
-      <div class="ex-tip">💡 {{ ex.tip }}</div>
+      <div class="ex-tip">{{ ex.tip }}</div>
     </div>
     {% endfor %}
   </div>
 
-  <div class="info-box" style="margin-top:1.5rem; border-color:rgba(247,201,72,0.15);">
-    <div class="info-box-title" style="color:#f7c948;">Training Notes</div>
+  <div class="info-box" style="margin-top:1.5rem;">
+    <div class="info-box-title">Training Notes</div>
     <p>
-      Warm up for <strong style="color:var(--text);">5–10 minutes</strong> before starting.
-      Rest at least <strong style="color:var(--text);">48 hours</strong> before training the same muscle group again.
-      Aim to <strong style="color:var(--text);">add weight or reps</strong> each week — that's progressive overload.
+      Warm up <strong style="color:var(--white);">5–10 min</strong> before you start.
+      Rest <strong style="color:var(--white);">48 hours</strong> before hitting the same muscle again.
+      Progressive overload — <strong style="color:var(--white);">add weight or reps every week</strong>. That's how you grow.
     </p>
   </div>
 
-  <div style="text-align:center; margin-top:2rem;">
-    <a href="/" class="btn btn-secondary" style="display:inline-flex; width:auto;">
+  <div style="margin-top:2rem;">
+    <a href="/" class="btn btn-secondary" style="display:inline-flex;width:auto;">
       ← Back to Calculator
     </a>
   </div>
