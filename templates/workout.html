@@ -5,11 +5,11 @@
 {% block content %}
 
 <div class="page-header">
-  <div class="badge" style="background: linear-gradient(135deg, #a78bfa, #4fc3f7); color: #0b0c10;">
+  <div class="page-tag" style="color:#ff6b6b; background:rgba(255,107,107,0.08); border-color:rgba(255,107,107,0.2);">
     💪 Workout Generator
   </div>
-  <h1>Build Your <span style="background: linear-gradient(135deg, #a78bfa, #4fc3f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Workout</span></h1>
-  <p>Pick a muscle group and difficulty — get a full workout plan instantly.</p>
+  <h1>Build Your <span style="background:linear-gradient(135deg,#ff6b6b,#f7c948);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Workout</span></h1>
+  <p>Pick a muscle group and difficulty — get a full plan instantly.</p>
 </div>
 
 <div class="card">
@@ -32,106 +32,84 @@
         <label>Difficulty</label>
         <select name="difficulty" required>
           <option value="">Select difficulty</option>
-          <option value="beginner"   {% if result and result.difficulty == 'Beginner'     %}selected{% endif %}>🟢 Beginner</option>
-          <option value="intermediate" {% if result and result.difficulty == 'Intermediate' %}selected{% endif %}>🟡 Intermediate</option>
-          <option value="advanced"   {% if result and result.difficulty == 'Advanced'     %}selected{% endif %}>🔴 Advanced</option>
+          <option value="beginner"     {% if result and result.difficulty == 'Beginner'     %}selected{% endif %}>Beginner</option>
+          <option value="intermediate" {% if result and result.difficulty == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+          <option value="advanced"     {% if result and result.difficulty == 'Advanced'     %}selected{% endif %}>Advanced</option>
         </select>
       </div>
 
     </div>
-
-    <button type="submit" class="btn" style="
-      background: linear-gradient(135deg, #a78bfa, #4fc3f7);
-      color: #0b0c10;
-      width: 100%;
-      margin-top: 1.5rem;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 0.85rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    ">
-      Generate Workout 🚀
+    <button type="submit" class="btn btn-primary" style="background:linear-gradient(135deg,#ff6b6b,#f7c948); box-shadow:0 4px 24px rgba(255,107,107,0.2);">
+      Generate Workout →
     </button>
   </form>
 </div>
 
 {% if result %}
-
 <div class="result-section">
 
-  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
-    <h2 style="margin:0;">
-      {% if result.muscle_group == 'Chest' %}🏋️
-      {% elif result.muscle_group == 'Back' %}🔙
-      {% elif result.muscle_group == 'Legs' %}🦵
-      {% elif result.muscle_group == 'Shoulders' %}🤷
-      {% elif result.muscle_group == 'Arms' %}💪
-      {% else %}⚡{% endif %}
-      {{ result.muscle_group }} &mdash; {{ result.difficulty }}
-    </h2>
+  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem;">
+    <div>
+      <div class="section-title" style="margin-bottom:0.25rem;">Your Workout</div>
+      <div style="font-size:1.2rem; font-weight:800; letter-spacing:-0.5px;">
+        {% if result.muscle_group == 'Chest' %}🏋️
+        {% elif result.muscle_group == 'Back' %}🔙
+        {% elif result.muscle_group == 'Legs' %}🦵
+        {% elif result.muscle_group == 'Shoulders' %}🤷
+        {% elif result.muscle_group == 'Arms' %}💪
+        {% else %}⚡{% endif %}
+        {{ result.muscle_group }}
+      </div>
+    </div>
 
-    <div style="display:flex; gap:0.75rem;">
-      <div class="badge-pill" style="
-        {% if result.difficulty == 'Beginner' %}background:#39d98a22; color:#39d98a;
-        {% elif result.difficulty == 'Intermediate' %}background:#f7c94822; color:#f7c948;
-        {% else %}background:#ef444422; color:#ef4444;{% endif %}
-        font-size:0.8rem; padding:0.35rem 0.9rem;">
+    <div style="display:flex; gap:0.5rem; align-items:center;">
+      <span class="pill" style="
+        {% if result.difficulty == 'Beginner' %}background:rgba(67,233,123,0.1); color:#43e97b; border-color:rgba(67,233,123,0.2);
+        {% elif result.difficulty == 'Intermediate' %}background:rgba(247,201,72,0.1); color:#f7c948; border-color:rgba(247,201,72,0.2);
+        {% else %}background:rgba(255,107,107,0.1); color:#ff6b6b; border-color:rgba(255,107,107,0.2);{% endif %}
+        font-size:0.75rem; padding:0.35rem 0.85rem;">
         {{ result.difficulty }}
-      </div>
-      <div class="badge-pill" style="background:#ffffff11; color:var(--muted); font-size:0.8rem; padding:0.35rem 0.9rem;">
+      </span>
+      <span class="pill" style="background:rgba(255,255,255,0.04); color:var(--text-2); border-color:var(--border); font-size:0.75rem; padding:0.35rem 0.85rem;">
         {{ result.total }} exercises
-      </div>
+      </span>
     </div>
   </div>
 
   <div class="exercise-list">
     {% for ex in result.exercises %}
     <div class="exercise-card">
-
-      <div class="ex-name">
-        <span style="
-          display:inline-flex; align-items:center; justify-content:center;
-          width:22px; height:22px; border-radius:50%;
-          background: linear-gradient(135deg, #a78bfa, #4fc3f7);
-          color: #0b0c10; font-size:0.7rem; font-weight:900;
-          margin-right:0.5rem; vertical-align:middle;
-        ">{{ loop.index }}</span>
-        {{ ex.exercise }}
+      <div class="ex-num">{{ loop.index }}</div>
+      <div class="ex-content">
+        <div class="ex-name">{{ ex.exercise }}</div>
       </div>
-
-      <div class="ex-tip">💡 {{ ex.tip }}</div>
-
       <div class="ex-badges">
-        <span class="badge-pill" style="background:#ff6b3522; color:#ff6b35;">
+        <span class="pill" style="background:rgba(255,107,107,0.1); color:#ff6b6b; border-color:rgba(255,107,107,0.2);">
           {{ ex.sets }} sets
         </span>
-        <span class="badge-pill" style="background:#4fc3f722; color:#4fc3f7;">
+        <span class="pill" style="background:rgba(108,99,255,0.1); color:#a78bfa; border-color:rgba(108,99,255,0.2);">
           {{ ex.reps }} reps
         </span>
-        <span class="badge-pill" style="background:#39d98a22; color:#39d98a;">
-          {{ ex.rest }} rest
+        <span class="pill" style="background:rgba(67,233,123,0.1); color:#43e97b; border-color:rgba(67,233,123,0.2);">
+          {{ ex.rest }}
         </span>
       </div>
-
+      <div class="ex-tip">💡 {{ ex.tip }}</div>
     </div>
     {% endfor %}
   </div>
 
-  <div class="card" style="margin-top:1.5rem; border-color:#f7c94833;">
-    <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#f7c948; margin-bottom:0.6rem;">
-      ⚠️ Training Tips
-    </div>
-    <div style="font-size:0.85rem; color:var(--muted); line-height:1.8;">
-      Always warm up for <strong style="color:var(--text);">5–10 minutes</strong> before starting.
-      Rest <strong style="color:var(--text);">at least 48 hours</strong> before training the same muscle group again.
-      Track your weights and aim to <strong style="color:var(--text);">add weight or reps</strong> each week — that's progressive overload.
-    </div>
+  <div class="info-box" style="margin-top:1.5rem; border-color:rgba(247,201,72,0.15);">
+    <div class="info-box-title" style="color:#f7c948;">Training Notes</div>
+    <p>
+      Warm up for <strong style="color:var(--text);">5–10 minutes</strong> before starting.
+      Rest at least <strong style="color:var(--text);">48 hours</strong> before training the same muscle group again.
+      Aim to <strong style="color:var(--text);">add weight or reps</strong> each week — that's progressive overload.
+    </p>
   </div>
 
   <div style="text-align:center; margin-top:2rem;">
-    <a href="/" class="btn btn-primary" style="width:auto; display:inline-block;">
+    <a href="/" class="btn btn-secondary" style="display:inline-flex; width:auto;">
       ← Back to Calculator
     </a>
   </div>
