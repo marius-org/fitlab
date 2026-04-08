@@ -1,0 +1,55 @@
+---
+- name: Configure FitLab server
+  hosts: tag_fitlab
+  become: true
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - git
+          - python3-pip
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start and enable Docker
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Clone the FitLab repo
+      git:
+        repo: https://github.com/marius-org/fitlab.git
+        dest: /opt/fitlab
+        force: yes
+
+    - name: Build Docker image
+      community.docker.docker_image:
+        name: fitlab
+        build:
+          path: /opt/fitlab
+        source: build
+        force_source: yes
+
+    - name: Run FitLab container
+      community.docker.docker_container:
+        name: fitlab
+        image: fitlab
+        state: started
+        restart_policy: always
+        ports:
+          - "80:8000"
