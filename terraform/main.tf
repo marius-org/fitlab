@@ -48,6 +48,7 @@ resource "aws_security_group" "fitlab" {
 
 # EC2 instance
 resource "aws_instance" "fitlab" {
+  count                  = var.instance_count
   ami                    = "ami-0a422d70f727fe93e" # Ubuntu 24.04 eu-west-1
   instance_type          = var.instance_type
   key_name               = aws_key_pair.fitlab.key_name

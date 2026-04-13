@@ -15,3 +15,7 @@ variable "public_key_path" {
   description = "Path to your local public SSH key"
   default     = "~/.ssh/id_rsa.pub"
 }
+
+variable "instance_count" {
+  default = 1
+}
